@@ -9,7 +9,7 @@ private:
     string password;
     string roomtype;
 public:
-    user(string a, string b, stringc= "") {
+    user(string a, string b, string c= "") {
         username = a;
         password = b;
         roomtype = c; 
@@ -30,9 +30,9 @@ public:
 class manager{
     public:
 
-    void userregistration()
-    { string username , string password , string roomtype;
-        cout<< "\n Registeration Section\n";  \
+    void userRegistration()
+    { string username , password , roomtype;
+        cout<< "\n Registeration Section \n"; 
         cout<<"Enter username:";
         cin>>username;
 
@@ -50,4 +50,4 @@ class manager{
 
 
 
-}
+};
