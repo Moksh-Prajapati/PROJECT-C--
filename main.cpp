@@ -29,7 +29,7 @@ public:
 
 class manager{
     public:
-
+    //for registration
     void userRegistration()
     { string username , password , roomtype;
         cout<< "\n Registeration Section \n"; 
@@ -46,8 +46,31 @@ class manager{
         cout<<"Registration successful!"<<endl;
 
     } 
+  
+    //for login
+    bool loginUser(string &loggedUser)
+    {
+    string username, password;
+    cout << "\n Login \n";
 
+    cout <<"Enter Username:";
+    cin >> username;
 
+    cout<<"Enter Password:";
+    cin>>password;
 
+    ifstream file("login.txt");
+    string u,p;
 
+        while (file>>u>>p) {
+            if (u==username && p==password) {
+                loggedUser=username;
+                cout<<"Login successful!\n";
+                return true;
+            }
+        }
+
+        cout << "Invalid credentials!\n";
+        return false;
+    }
 };
