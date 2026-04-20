@@ -35,10 +35,10 @@ class AuthManager{
             string username , password , roomtype;
             cout<< "\n Registeration Section \n"; 
             cout<<"Enter username:";
-            cin>>username;
+            getline(cin,username);
 
             cout<<"Enter password:";
-            cin>>password;
+            getline(cin,password);
             
             ofstream file("login.txt",ios::app);
             file<<username<<" "<<password<<" "<<endl;
@@ -55,10 +55,10 @@ class AuthManager{
             cout <<"\n Login \n";
 
             cout <<"Enter Username:";
-            cin >>username;
+            getline(cin,username);
 
             cout<<"Enter Password:";
-            cin>>password;
+            getline(cin,password);
 
             ifstream file("login.txt");
             string u,p;
