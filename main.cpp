@@ -155,7 +155,8 @@ class Manager{
                 if (doubleQueue.size()==2){
                     string RoomNumber="D"+to_string(RoomCounter++);
 
-                    cout << "Room allotted to "
+                    cout<<"_______________________________________"<<endl
+                        << "Room allotted to "
                         << doubleQueue[0].getUserName()<<" & "
                         << doubleQueue[1].getUserName()<<endl;
                     cout <<"Room Number is: "<<RoomNumber<<endl;
@@ -226,8 +227,8 @@ void Login(AuthManager auth,Manager manager){
             }
             break;
         case 3:
-            cout<<"Exiting....";
-            return;
+            cout<<"Exiting....\n";
+            exit(0);
 
             break;
             
