@@ -9,11 +9,13 @@ private:
     string username;
     string password;
     string roomtype;
+    int uid;
 public:
-    user(string a, string b, string c= ""){
+    user(string a, string b, string c= "", int d = 0){
         username=a;
         password=b;
         roomtype=c; 
+        uid = d;
     }
     string getUserName(){
         return username;
@@ -23,7 +25,10 @@ public:
     }   
     string getRoomType(){
         return roomtype;
-    }  
+    }
+    int getUID(){
+        return uid;
+    }
 };
 
 
@@ -41,18 +46,27 @@ class AuthManager{
             cout<<"Enter password(No spaces):";
             cin>>password;
             
+            // Calculate UID based on number of lines in login.txt
+            int lines = 0;
+            string dummy;
+            ifstream countFile("login.txt");
+            while (getline(countFile, dummy)) lines++;
+            countFile.close();
+            int uid = 1000 + lines;
+
             ofstream file("login.txt",ios::app);
-            file<<username<<" "<<password<<" "<<endl;
+            file<<username<<" "<<password<<" "<<uid<<endl;
             file.close();
 
-            cout<<"Registration successful!"<<endl;
+            cout<<"Registration successful! Your UID is: "<<uid<<endl;
 
         } 
   
         //for login
-        bool loginUser(string &loggedUser)
+        bool loginUser(string &loggedUser, int &loggedUID)
         {
             string username, password;
+            int inputUID;
             cout <<"\n Login \n";
 
             cout <<"Enter Username:";
@@ -61,18 +75,23 @@ class AuthManager{
             cout<<"Enter Password:";
             cin>>password;
 
+            cout<<"Enter UID:";
+            cin>>inputUID;
+
             ifstream file("login.txt");
             string u,p;
+            int uid;
 
-            while (file>>u>>p) {
-                if (u==username && p==password) {
+            while (file>>u>>p>>uid) {
+                if (u==username && p==password && uid==inputUID) {
                     loggedUser=username;
-                    cout<<"\nLogin successful!\n";
+                    loggedUID=uid;
+                    cout<<"\nLogin successful! (UID: "<<uid<<")\n";
                     return true;
                 }
             }
 
-            cout << "\nInvalid credentials!\n";
+            cout << "\nInvalid credentials or UID!\n";
             return false;
     }
 };
@@ -100,6 +119,7 @@ class Manager{
 
             for (int i = 0;i<users.size();i++) {
                 file << "User: " << users[i].getUserName()
+                    << " (UID: " << users[i].getUID() << ")"
                     << " | Type: " << users[i].getRoomType() << endl;
             }
 
@@ -115,13 +135,13 @@ class Manager{
         }
 
         // allocate room
-        void allocateRoom(string username) {
+        void allocateRoom(string username, int uid) {
             string type;
 
             cout << "Enter Room Type (single/double): ";
             cin >> type;
 
-            user u(username, "", type);
+            user u(username, "", type, uid);
 
             //Single Rooms
             if (type == "single") {
@@ -194,13 +214,14 @@ class Manager{
         
 };
 
-    void Booking(AuthManager auth, Manager manager, string loggedUser);
+    void Booking(AuthManager auth, Manager manager, string loggedUser, int loggedUID);
     void Login(AuthManager auth, Manager manager);
 
 void Login(AuthManager auth,Manager manager){
     int choice;
     bool end;
     string loggedUser;
+    int loggedUID;
 
     cout << "===== Hostel Management System =====\n";
 
@@ -222,8 +243,8 @@ void Login(AuthManager auth,Manager manager){
             break;
 
         case 2:
-            if(auth.loginUser(loggedUser)){
-                Booking(auth,manager,loggedUser);
+            if(auth.loginUser(loggedUser, loggedUID)){
+                Booking(auth,manager,loggedUser, loggedUID);
             }
             break;
         case 3:
@@ -239,7 +260,7 @@ void Login(AuthManager auth,Manager manager){
     } while(choice!=-1);
 }
 
-void Booking(AuthManager auth,Manager manager,string loggedUser){
+void Booking(AuthManager auth,Manager manager,string loggedUser, int loggedUID){
     
     int choice;
     do{
@@ -249,7 +270,7 @@ void Booking(AuthManager auth,Manager manager,string loggedUser){
 
             switch(choice){
                 case 1:
-                    manager.allocateRoom(loggedUser);
+                    manager.allocateRoom(loggedUser, loggedUID);
                     break;
 
                 case 2:
